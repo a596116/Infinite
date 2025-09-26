@@ -28,7 +28,7 @@
         </li>
 
         <!-- 無限載入組件 -->
-        <InfiniteLoading v-if="repos.length > 0" />
+        <InfiniteLoading v-if="repos.length > 0" @on-infinite="onInfinite" />
       </ul>
     </div>
   </main>
@@ -75,6 +75,10 @@ const fetchRepos = async () => {
     .catch((err) => {
       console.error(err)
     })
+}
+
+const onInfinite = (infiniteState) => {
+  console.log('onInfinite', infiniteState)
 }
 
 onMounted(() => {
