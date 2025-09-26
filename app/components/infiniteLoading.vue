@@ -40,11 +40,7 @@
 </template>
 
 <script setup lang="ts">
-interface InfiniteState {
-  loaded: () => void
-  complete: () => void
-  error: () => void
-}
+import type { InfiniteState } from '~/types'
 
 // ----------- props -----------
 withDefaults(
