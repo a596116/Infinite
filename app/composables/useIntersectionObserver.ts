@@ -21,7 +21,7 @@ export const useIntersectionObserver = () => {
 
     const defaultOptions = {
       root: null,
-      threshold: 1,
+      threshold: 0.8,
       ...options,
     }
 
