@@ -26,6 +26,9 @@
             </p>
           </NuxtLink>
         </li>
+
+        <!-- 無限載入組件 -->
+        <InfiniteLoading v-if="repos.length > 0" />
       </ul>
     </div>
   </main>
