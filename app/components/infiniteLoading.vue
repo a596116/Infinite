@@ -1,41 +1,40 @@
 <template>
   <div class="w-full">
-    <!-- 加載中 -->
-    <div v-if="state === 'loading'" class="py-8 text-center">
-      <slot name="spinner">
-        <div class="flex justify-center items-center">
-          <div
-            class="w-8 h-8 rounded-full border-b-2 border-blue-600 animate-spin"
-          />
-        </div>
-        <p class="mt-2 text-sm text-gray-500">載入中...</p>
-      </slot>
-    </div>
+    <div ref="targetRef" class="h-[60px] flex items-center justify-center">
+      <!-- 加載中 -->
+      <div v-if="state === 'loading'" class="text-center">
+        <slot name="spinner">
+          <div class="flex justify-center items-center">
+            <div
+              class="w-8 h-8 rounded-full border-b-2 border-blue-600 animate-spin"
+            />
+          </div>
+          <p class="mt-2 text-sm text-gray-500">載入中...</p>
+        </slot>
+      </div>
 
-    <!-- 載入完成 -->
-    <div v-if="state === 'complete'" class="py-8 text-center">
-      <slot name="complete">
-        <span class="text-gray-500">{{ complete }}</span>
-      </slot>
-    </div>
+      <!-- 載入完成 -->
+      <div v-if="state === 'complete'" class="text-center">
+        <slot name="complete">
+          <span class="text-gray-500">{{ complete }}</span>
+        </slot>
+      </div>
 
-    <!-- 載入錯誤 -->
-    <div v-if="state === 'error'" class="py-8 text-center">
-      <slot name="error" :retry="retry">
-        <div class="">
-          <p class="mb-4 text-red-600">{{ error }}</p>
-          <button
-            class="px-4 py-2 text-white bg-red-600 rounded transition-colors hover:bg-red-700"
-            @click="retry"
-          >
-            重試
-          </button>
-        </div>
-      </slot>
+      <!-- 載入錯誤 -->
+      <div v-if="state === 'error'" class="text-center">
+        <slot name="error" :retry="retry">
+          <div class="">
+            <p class="mb-4 text-red-600">{{ error }}</p>
+            <button
+              class="px-4 py-2 text-white bg-red-600 rounded transition-colors hover:bg-red-700"
+              @click="retry"
+            >
+              重試
+            </button>
+          </div>
+        </slot>
+      </div>
     </div>
-
-    <!-- Intersection Observer 觸發元素 -->
-    <div ref="targetRef" class="h-4" />
   </div>
 </template>
 
