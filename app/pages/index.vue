@@ -45,6 +45,8 @@
         <InfiniteLoading v-if="repos.length > 0" @on-infinite="onInfinite" />
       </ul>
     </div>
+
+    <BackTop />
   </main>
 </template>
 
