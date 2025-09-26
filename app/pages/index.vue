@@ -73,19 +73,19 @@ const fetchRepos = async (isLoadMore = false) => {
   const currentPage = isLoadMore ? page.value + 1 : 1
 
   const githubToken = useRuntimeConfig().public.githubToken
-  const options = {
-    query: {
-      page: currentPage,
-      per_page: perPage,
-      sort: 'created',
-      direction: 'desc',
-    },
+
+  // 建立url,並將query參數添加到url
+  const url = new URL('https://api.github.com/users/antfu/repos')
+  url.searchParams.set('page', currentPage.toString())
+  url.searchParams.set('per_page', perPage.toString())
+  url.searchParams.set('sort', 'created')
+  url.searchParams.set('direction', 'desc')
+
+  return await fetch(url, {
     headers: {
       Authorization: `Bearer ${githubToken}`,
     },
-  }
-
-  return await fetch(`https://api.github.com/users/antfu/repos`, options)
+  })
     .then((res) => res.json())
     .then((data) => {
       repos.value = isLoadMore ? [...repos.value, ...data] : data
