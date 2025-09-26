@@ -4,4 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss'],
   css: ['~/styles/tailwind.css'],
+  runtimeConfig: {
+    public: {
+      githubToken: process.env.GITHUB_TOKEN || '',
+    },
+  },
 })
