@@ -2,6 +2,20 @@
   <main class="py-8 min-h-screen bg-gray-50">
     <div class="flex flex-col gap-4 mx-auto max-w-4xl">
       <h1 class="text-3xl font-bold text-center">Github</h1>
+      <div class="mb-6 text-center">
+        <p class="text-gray-600">
+          使用
+          <a
+            href="https://github.com/antfu"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold text-blue-600 transition-colors duration-200 hover:text-blue-800"
+          >
+            @antfu
+          </a>
+          的倉庫
+        </p>
+      </div>
 
       <!-- 列表 -->
       <ul class="flex flex-col gap-4">
@@ -63,7 +77,7 @@ const fetchRepos = async (isLoadMore = false) => {
     query: {
       page: currentPage,
       per_page: perPage,
-      sort: 'updated',
+      sort: 'created',
       direction: 'desc',
     },
     headers: {
@@ -71,7 +85,7 @@ const fetchRepos = async (isLoadMore = false) => {
     },
   }
 
-  return await fetch(`https://api.github.com/users/octocat/repos`, options)
+  return await fetch(`https://api.github.com/users/antfu/repos`, options)
     .then((res) => res.json())
     .then((data) => {
       repos.value = isLoadMore ? [...repos.value, ...data] : data
