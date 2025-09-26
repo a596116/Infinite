@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import type { InfiniteState } from '~/types'
+
 interface Repo {
   id: number
   html_url: string
@@ -47,18 +49,20 @@ const page = ref(1)
 
 // 頁數
 const INITIAL_LOAD = 30
+const LOAD_MORE = 10
 
 /*
  * @description: 獲取github repos數據
  */
-const fetchRepos = async () => {
-  const per_page = INITIAL_LOAD
+const fetchRepos = async (isLoadMore = false) => {
+  const perPage = isLoadMore ? LOAD_MORE : INITIAL_LOAD
+  const currentPage = isLoadMore ? page.value + 1 : 1
 
   const githubToken = useRuntimeConfig().public.githubToken
   const options = {
     query: {
-      page: page.value,
-      per_page: per_page,
+      page: currentPage,
+      per_page: perPage,
       sort: 'updated',
       direction: 'desc',
     },
@@ -67,22 +71,42 @@ const fetchRepos = async () => {
     },
   }
 
-  await fetch(`https://api.github.com/users/octocat/repos`, options)
+  return await fetch(`https://api.github.com/users/octocat/repos`, options)
     .then((res) => res.json())
     .then((data) => {
-      repos.value = data
+      repos.value = isLoadMore ? [...repos.value, ...data] : data
+
+      page.value = currentPage
+      return data
     })
     .catch((err) => {
       console.error(err)
     })
 }
 
-const onInfinite = (infiniteState) => {
-  console.log('onInfinite', infiniteState)
+/*
+ * @description: 無限載入
+ */
+const onInfinite = async (infiniteState: InfiniteState) => {
+  try {
+    const res = await fetchRepos(true)
+
+    if (res.length === 0 || res.length < LOAD_MORE) {
+      // 沒有更多資料了
+      infiniteState.complete()
+    } else {
+      // 載入完成，準備下次載入
+      infiniteState.loaded()
+    }
+  } catch (err) {
+    // 載入失敗
+    console.error('載入更多資料失敗:', err)
+    infiniteState.error()
+  }
 }
 
-onMounted(() => {
-  fetchRepos()
+onMounted(async () => {
+  await fetchRepos()
 })
 
 useSeoMeta({
